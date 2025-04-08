@@ -21,18 +21,17 @@ maestro = Controller()
 maestro.setTarget(LEFT_WHEEL, NEUTRAL)
 maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
 
-# Initialize RealSense camera
+# Initializes RealSense camera
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 pipeline.start(config)
 time.sleep(1)
 
-# ArUco marker setup
+# ArUco marker
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 parameters = cv2.aruco.DetectorParameters()
 
-# Dummy camera calibration (replace with real values if you have them)
 camera_matrix = np.array([[615, 0, 320], [0, 615, 240], [0, 0, 1]])
 dist_coeffs = np.zeros((5, 1))
 
