@@ -119,15 +119,16 @@ try:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        
+        centered = False
+        while not centered:
+            centered = center_marker_in_frame
 
         if ids is not None:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
             
-            centered = False
-            while not centered:
-                centered = center_marker_in_frame
 
             for i, marker_id in enumerate(ids):
                 if marker_id in passed_marker_ids:
