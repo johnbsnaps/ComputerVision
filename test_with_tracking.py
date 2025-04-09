@@ -125,8 +125,9 @@ try:
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
             
-            while not center_marker_in_frame:
-                center_marker_in_frame(gray, corners)
+            centered = False
+            while not centered:
+                centered = center_marker_in_frame
 
             for i, marker_id in enumerate(ids):
                 if marker_id in passed_marker_ids:
