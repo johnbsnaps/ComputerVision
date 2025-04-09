@@ -120,15 +120,17 @@ try:
 
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         
-        centered = False
-        while not centered:
-            print("Not Centered")
-            centered = center_marker_in_frame(frame, corners)
 
         if ids is not None:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
+            
+            centered = False
+            while not centered:
+                print("Not Centered")
+                centered = center_marker_in_frame(frame, corners)
+            print("Centered Now!")
             
 
             for i, marker_id in enumerate(ids):
