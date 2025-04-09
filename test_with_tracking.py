@@ -21,7 +21,7 @@ current_pan = PAN_CENTER
 current_tilt = TILT_CENTER
 
 NEUTRAL = 6000
-FORWARD = 5000
+FORWARD = 5000  
 BACKWARD = 7000
 
 # Tracker for markers
@@ -74,7 +74,7 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
      
-def center_marker_in_frame(frame, corners, threshold=.5):
+def center_marker_in_frame(frame, corners, threshold=1):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
@@ -174,7 +174,7 @@ try:
                     turn_left(0.4)
                 else:
                     turn_right(0.4)
-                move_forward(1.2)
+                move_forward(4)
 
                 passed_marker_ids.append(marker_id)
 
