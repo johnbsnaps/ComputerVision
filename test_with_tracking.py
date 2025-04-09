@@ -128,7 +128,6 @@ try:
             idx = 0
             centered = False
             while not centered:
-                print("Not Centered")
                 frames = pipeline.wait_for_frames()
                 color_frame = frames.get_color_frame()
                 if not color_frame:
@@ -168,13 +167,13 @@ try:
 
                 # Turn then move forward
                 if side == "left":
-                    turn_left(1)
+                    turn_left(1.4)
                     move_forward(1)
-                    turn_right(1)
+                    turn_right(1.4)
                 else:
-                    turn_right(1)
+                    turn_right(1.4)
                     move_forward(1)
-                    turn_left(1)
+                    turn_left(1.4)
                 move_forward(3)
 
                 passed_marker_ids.append(marker_id)
