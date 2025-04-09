@@ -72,7 +72,7 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
      
-def center_marker_in_frame(frame, corners, threshold=15):
+def center_marker_in_frame(frame, corners, threshold=1):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
@@ -82,9 +82,13 @@ def center_marker_in_frame(frame, corners, threshold=15):
     marker = corners[0][0]
     marker_x = int(np.mean(marker[:, 0]))
     marker_y = int(np.mean(marker[:, 1]))
+    
 
     offset_x = marker_x - center_x
     offset_y = marker_y - center_y
+    
+    print(offset_x)
+    print(offset_y)
 
     # Update pan/tilt only if offset is above threshold
     moved = False
