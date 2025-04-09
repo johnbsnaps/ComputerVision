@@ -13,8 +13,8 @@ PAN = 3
 TILT = 4
 PAN_CENTER = 6000
 TILT_CENTER = 6000
-PAN_RANGE = 1000  # how far to pan left/right
-TILT_RANGE = 500  # how far to tilt up/down
+PAN_RANGE = 300  # how far to pan left/right
+TILT_RANGE = 200  # how far to tilt up/down
 
 # Current position tracking
 current_pan = PAN_CENTER
@@ -126,11 +126,25 @@ try:
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
             
+            idx = 0
             centered = False
             while not centered:
                 print("Not Centered")
-                centered = center_marker_in_frame(frame, corners)
-            print("Centered Now!")
+                frames = pipeline.wait_for_frames()
+                color_frame = frames.get_color_frame()
+                if not color_frame:
+                    continue
+
+                frame = np.asanyarray(color_frame.get_data())
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+                new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+                if new_corners and new_ids is not None and len(new_ids) > idx:
+                    centered = center_marker_in_frame(frame, [new_corners[idx]])
+
+                cv2.imshow("Centering", frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
             
 
             for i, marker_id in enumerate(ids):
