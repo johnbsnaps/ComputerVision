@@ -168,10 +168,14 @@ try:
 
                 # Turn then move forward
                 if side == "left":
-                    turn_left(0.4)
+                    turn_left(1)
+                    move_forward(1)
+                    turn_right(1)
                 else:
-                    turn_right(0.4)
-                move_forward(4)
+                    turn_right(1)
+                    move_forward(1)
+                    turn_left(1)
+                move_forward(3)
 
                 passed_marker_ids.append(marker_id)
 
