@@ -5,8 +5,8 @@ import pyrealsense2 as rs
 from maestro import Controller
 
 # Maestro channel assignments
-LEFT_WHEEL = 0
-RIGHT_WHEEL = 1
+STRAIGHT = 0
+ROTATE = 1
 
 # Servo constants
 PAN = 3
@@ -29,8 +29,8 @@ passed_marker_ids = []
 
 # Initialize Maestro controller
 maestro = Controller()
-maestro.setTarget(LEFT_WHEEL, NEUTRAL)
-maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
+maestro.setTarget(STRAIGHT, NEUTRAL)
+maestro.setTarget(ROTATE, NEUTRAL)
 maestro.setTarget(PAN, PAN_CENTER)
 maestro.setTarget(TILT, TILT_CENTER)
 
@@ -50,27 +50,24 @@ dist_coeffs = np.zeros((5, 1))
 
 # Movement helpers
 def stop():
-    maestro.setTarget(LEFT_WHEEL, NEUTRAL)
-    maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
+    maestro.setTarget(STRAIGHT, NEUTRAL)
+    maestro.setTarget(ROTATE, NEUTRAL)
 
 def turn_left(duration=0.5):
     print("Turning left...")
-    maestro.setTarget(LEFT_WHEEL, BACKWARD)
-    maestro.setTarget(RIGHT_WHEEL, FORWARD)
+    maestro.setTarget(ROTATE, BACKWARD)
     time.sleep(duration)
     stop()
 
 def turn_right(duration=0.5):
     print("Turning right...")
-    maestro.setTarget(LEFT_WHEEL, FORWARD)
-    maestro.setTarget(RIGHT_WHEEL, BACKWARD)
+    maestro.setTarget(ROTATE, FORWARD)
     time.sleep(duration)
     stop()
 
 def move_forward(duration=1.0):
     print("Moving forward...")
-    maestro.setTarget(LEFT_WHEEL, FORWARD)
-    maestro.setTarget(RIGHT_WHEEL, FORWARD)
+    maestro.setTarget(STRAIGHT, FORWARD)
     time.sleep(duration)
     stop()
      
