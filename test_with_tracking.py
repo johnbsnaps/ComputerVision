@@ -74,7 +74,7 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
      
-def center_marker_in_frame(frame, corners, threshold=1):
+def center_marker_in_frame(frame, corners, threshold=10):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
