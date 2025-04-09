@@ -9,8 +9,8 @@ LEFT_WHEEL = 0
 RIGHT_WHEEL = 1
 
 # Servo constants
-PAN = 2
-TILT = 3
+PAN = 3
+TILT = 4
 PAN_CENTER = 6000
 TILT_CENTER = 6000
 PAN_RANGE = 1000  # how far to pan left/right
@@ -66,41 +66,42 @@ def turn_right(duration=0.5):
     stop()
 
 def move_forward(duration=1.0):
-    return
-
-def center_marker_in_frame(frame, corners):
+    print("Moving forward...")
+    maestro.setTarget(LEFT_WHEEL, FORWARD)
+    maestro.setTarget(RIGHT_WHEEL, FORWARD)
+    time.sleep(duration)
+    stop()
+     
+def center_marker_in_frame(frame, corners, threshold=15):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
     center_x = w // 2
     center_y = h // 2
 
-    for corner in corners:
-        marker = corner[0]
-        marker_x = int(np.mean(marker[:, 0]))
-        marker_y = int(np.mean(marker[:, 1]))
+    marker = corners[0][0]
+    marker_x = int(np.mean(marker[:, 0]))
+    marker_y = int(np.mean(marker[:, 1]))
 
-        offset_x = marker_x - center_x
-        offset_y = marker_y - center_y
+    offset_x = marker_x - center_x
+    offset_y = marker_y - center_y
 
-        # Adjust pan and tilt based on offset (tweak sensitivity as needed)
-        if abs(offset_x) > 10:
-            current_pan -= int(offset_x * 0.5)
-        if abs(offset_y) > 10:
-            current_tilt += int(offset_y * 0.5)
-
-        # Clamp values
+    # Update pan/tilt only if offset is above threshold
+    moved = False
+    if abs(offset_x) > threshold:
+        current_pan -= int(offset_x * 0.4)
         current_pan = max(min(current_pan, PAN_CENTER + PAN_RANGE), PAN_CENTER - PAN_RANGE)
-        current_tilt = max(min(current_tilt, TILT_CENTER + TILT_RANGE), TILT_CENTER - TILT_RANGE)
-
-        # Move servos
         maestro.setTarget(PAN, current_pan)
+        moved = True
+
+    if abs(offset_y) > threshold:
+        current_tilt += int(offset_y * 0.4)
+        current_tilt = max(min(current_tilt, TILT_CENTER + TILT_RANGE), TILT_CENTER - TILT_RANGE)
         maestro.setTarget(TILT, current_tilt)
-    print("Moving forward...")
-    maestro.setTarget(LEFT_WHEEL, FORWARD)
-    maestro.setTarget(RIGHT_WHEEL, FORWARD)
-    time.sleep(duration)
-    stop()
+        moved = True
+
+    return not moved  # Return True when centered
+
 
 # Main loop
 try:
@@ -119,6 +120,9 @@ try:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
+            
+            while not center_marker_in_frame:
+                center_marker_in_frame(gray, corners)
 
             for i, marker_id in enumerate(ids):
                 if marker_id in passed_marker_ids:
@@ -170,26 +174,3 @@ finally:
     cv2.destroyAllWindows()
     stop()
     maestro.close()
-
-print("Starting pan/tilt marker centering loop...")
-
-try:
-    while True:
-        frames = pipeline.wait_for_frames()
-        color_frame = frames.get_color_frame()
-        if not color_frame:
-            continue
-        color_image = np.asanyarray(color_frame.get_data())
-        corners, ids, _ = cv2.aruco.detectMarkers(color_image, aruco_dict, parameters=parameters)
-
-        if ids is not None:
-            center_marker_in_frame(color_image, corners)
-
-        # Optional: visualize
-        cv2.imshow("Tracking", color_image)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-finally:
-    pipeline.stop()
-    cv2.destroyAllWindows()
