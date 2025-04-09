@@ -31,6 +31,8 @@ passed_marker_ids = []
 maestro = Controller()
 maestro.setTarget(LEFT_WHEEL, NEUTRAL)
 maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
+maestro.setTarget(PAN, PAN_CENTER)
+maestro.setTarget(TILT, TILT_CENTER)
 
 # Initializes RealSense camera
 pipeline = rs.pipeline()
@@ -72,7 +74,7 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
      
-def center_marker_in_frame(frame, corners, threshold=1):
+def center_marker_in_frame(frame, corners, threshold=.5):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
