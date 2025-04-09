@@ -171,11 +171,19 @@ try:
                     turn_left(1.4)
                     move_forward(1)
                     turn_right(1.4)
+                    move_forward(3)
+                    turn_right(1.4)
+                    move_forward(1)
+                    turn_left(1.4)
+                    
                 else:
                     turn_right(1.4)
                     move_forward(1)
                     turn_left(1.4)
-                move_forward(3)
+                    move_forward(3)
+                    turn_right(1.4)
+                    move_forward(1)
+                    turn_left(1.4)
 
                 passed_marker_ids.append(marker_id)
 
