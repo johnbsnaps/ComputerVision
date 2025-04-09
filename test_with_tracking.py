@@ -122,7 +122,8 @@ try:
         
         centered = False
         while not centered:
-            centered = center_marker_in_frame
+            print("Not Centered")
+            centered = center_marker_in_frame()
 
         if ids is not None:
             ids = ids.flatten()
