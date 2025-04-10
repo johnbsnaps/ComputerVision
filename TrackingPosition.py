@@ -95,7 +95,7 @@ def turn_left(duration=0.5):
 def turn_right(duration=0.5):
     print("Turning right...")
     maestro.setTarget(ROTATE, FORWARD)
-    time.sleep(duration - 0.3)
+    time.sleep(duration - 0.2)
     stop()
 
 def move_forward(duration=1.0):
@@ -143,9 +143,9 @@ global ROTATE_90
 global FORWARD_4_FEET
 global FORWARD_1_FOOT
 
-ROTATE_90 = 1.3
-FORWARD_4_FEET = 2
-FORWARD_1_FOOT = 1.4
+ROTATE_90 = 1.4
+FORWARD_4_FEET = 1.7
+FORWARD_1_FOOT = 1.2
 
 
 def pass_on_left():
