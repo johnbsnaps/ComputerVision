@@ -128,7 +128,9 @@ try:
             
             idx = 0
             centered = False
-            while not centered:
+            centering_iterations = 10
+            
+            for x in range (centering_iterations):
                 frames = pipeline.wait_for_frames()
                 color_frame = frames.get_color_frame()
                 if not color_frame:
@@ -139,7 +141,7 @@ try:
 
                 new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
                 if new_corners and new_ids is not None and len(new_ids) > idx:
-                    centered = center_marker_in_frame(frame, [new_corners[idx]])
+                    center_marker_in_frame(frame, [new_corners[idx]])
 
                 cv2.imshow("Centering", frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
