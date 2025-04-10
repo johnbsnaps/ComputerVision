@@ -9,6 +9,10 @@ import threading
 STRAIGHT = 0
 ROTATE = 1
 
+global MOVING
+MOVING = False
+
+
 # Servo constants
 PAN = 3
 TILT = 4
@@ -154,6 +158,8 @@ def pass_on_left():
     move_forward(FORWARD_1_FOOT)
     turn_left(ROTATE_90)
     MOVING = False
+    print(f"Done Moving, MOVING is now {MOVING}!" )
+
 
 def pass_on_right():
     # Create a movement sequence for the right side
@@ -165,9 +171,10 @@ def pass_on_right():
     move_forward(FORWARD_1_FOOT)
     turn_right(ROTATE_90)
     MOVING = False
+    print(f"Done Moving, MOVING is now {MOVING}!" )
+    
 
-global MOVING
-MOVING = False
+
 
 # Main loop
 try:
