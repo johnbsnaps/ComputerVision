@@ -13,7 +13,7 @@ ROTATE = 1
 PAN = 3
 TILT = 4
 PAN_CENTER = 6000
-TILT_CENTER = 6000
+TILT_CENTER = 4800
 PAN_RANGE = 300  # how far to pan left/right
 TILT_RANGE = 200  # how far to tilt up/down
 
@@ -125,11 +125,11 @@ def center_marker_in_frame(frame, corners, threshold=20):
         maestro.setTarget(PAN, current_pan)
         moved = True
 
-    if abs(offset_y) > threshold:
+    """ if abs(offset_y) > threshold:
         current_tilt += int(offset_y * 0.4)
         current_tilt = max(min(current_tilt, TILT_CENTER + TILT_RANGE), TILT_CENTER - TILT_RANGE)
         maestro.setTarget(TILT, current_tilt)
-        moved = True
+        moved = True """
 
     return not moved  # Return True when centered
 
@@ -173,6 +173,9 @@ try:
         frame = np.asanyarray(color_frame.get_data())
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        # Always show the camera feed
+        cv2.imshow("ArUco Navigation", frame)
+
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         
         if ids is not None:
@@ -198,7 +201,6 @@ try:
                     center_marker_in_frame(frame, [new_corners[idx]])
                     time.sleep(.1)
 
-                cv2.imshow("Centering", frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
@@ -245,7 +247,6 @@ try:
 
                 break  # Only handle one marker per frame
 
-        cv2.imshow("ArUco Navigation", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
