@@ -133,6 +133,8 @@ def center_marker_in_frame(frame, corners, threshold=10):
 
     return not moved  # Return True when centered
 
+#values for movement
+
 global ROTATE_90
 global FORWARD_4_FEET
 global FORWARD_1_FOOT
