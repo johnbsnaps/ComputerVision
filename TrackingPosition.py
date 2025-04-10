@@ -215,8 +215,19 @@ try:
                 cv2.drawFrameAxes(frame, camera_matrix, dist_coeffs, rvec, tvec, 0.03)
 
                 x, y, _ = tvec[0][0]
+                
+                # Draw the position of the marker on the camera window
                 cv2.putText(frame, f"Marker {marker_id} X: {x:.2f} Y: {y:.2f}",
                             (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
+                # Optionally, display the position near the marker
+                for corner in corners:
+                    for point in corner[0]:
+                        cv2.circle(frame, tuple(np.int32(point)), 5, (0, 0, 255), -1)  # Mark the corner
+                    marker_x, marker_y = np.mean(corner[0], axis=0)  # Get center of the marker
+                    cv2.putText(frame, f"X: {x:.2f} Y: {y:.2f}", (int(marker_x), int(marker_y)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)  # Display on marker center
+
 
                 # Determine left/right side to pass
                 side = "left" if marker_id % 2 else "right"
