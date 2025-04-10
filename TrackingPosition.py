@@ -13,7 +13,7 @@ ROTATE = 1
 PAN = 3
 TILT = 4
 PAN_CENTER = 6000
-TILT_CENTER = 4800
+TILT_CENTER = 4700
 PAN_RANGE = 300  # how far to pan left/right
 TILT_RANGE = 200  # how far to tilt up/down
 
