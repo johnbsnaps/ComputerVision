@@ -165,7 +165,7 @@ def pass_on_right():
     turn_right(ROTATE_90)
 
 global MOVING
-MOVING = false
+MOVING = False
 
 # Main loop
 try:
