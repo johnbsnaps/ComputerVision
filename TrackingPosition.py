@@ -3,6 +3,7 @@ import numpy as np
 import time
 import pyrealsense2 as rs
 from maestro import Controller
+import threading
 
 # Maestro channel assignments
 STRAIGHT = 0
@@ -75,7 +76,7 @@ parameters = cv2.aruco.DetectorParameters()
 camera_matrix = np.array([[615, 0, 320], [0, 615, 240], [0, 0, 1]])
 dist_coeffs = np.zeros((5, 1))
 
-# Movement helpers
+# Movement helpers (executed in a separate thread)
 def stop():
     maestro.setTarget(STRAIGHT, NEUTRAL)
     maestro.setTarget(ROTATE, NEUTRAL)
@@ -142,22 +143,23 @@ FORWARD_1_FOOT = 1
 
 
 def pass_on_left():
-    turn_left(ROTATE_90)
-    move_forward(FORWARD_1_FOOT)
-    turn_right(ROTATE_90)
-    move_forward(FORWARD_4_FEET)
-    turn_right(ROTATE_90)
-    move_forward(FORWARD_1_FOOT)
-    turn_left(ROTATE_90)
-    
+    # Creating separate thread for robot movement
+    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
+    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_4_FEET,)).start()
+    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
+    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
+
 def pass_on_right():
-    turn_right(ROTATE_90)
-    move_forward(FORWARD_1_FOOT)
-    turn_left(ROTATE_90)
-    move_forward(FORWARD_4_FEET)
-    turn_left(ROTATE_90)
-    move_forward(FORWARD_1_FOOT)
-    turn_right(ROTATE_90)
+    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
+    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_4_FEET,)).start()
+    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
+    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
+    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
 
 # Main loop
 try:
