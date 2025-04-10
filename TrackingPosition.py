@@ -95,7 +95,7 @@ def turn_left(duration=0.5):
 def turn_right(duration=0.5):
     print("Turning right...")
     maestro.setTarget(ROTATE, FORWARD)
-    time.sleep(duration-.2)
+    time.sleep(duration - 0.2)
     stop()
 
 def move_forward(duration=1.0):
@@ -149,6 +149,8 @@ FORWARD_1_FOOT = 1.4
 
 
 def pass_on_left():
+    global MOVING
+    MOVING = True  # Start movement
     # Create a movement sequence for the left side
     turn_left(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
@@ -157,11 +159,13 @@ def pass_on_left():
     turn_right(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
     turn_left(ROTATE_90)
-    MOVING = False
+    MOVING = False  # Movement completed
     print(f"Done Moving, MOVING is now {MOVING}!" )
 
 
 def pass_on_right():
+    global MOVING
+    MOVING = True  # Start movement
     # Create a movement sequence for the right side
     turn_right(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
@@ -170,10 +174,8 @@ def pass_on_right():
     turn_left(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
     turn_right(ROTATE_90)
-    MOVING = False
+    MOVING = False  # Movement completed
     print(f"Done Moving, MOVING is now {MOVING}!" )
-    
-
 
 
 # Main loop
@@ -251,10 +253,8 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
-                    MOVING = True
                     threading.Thread(target=pass_on_left).start()
                 else:
-                    MOVING = True
                     threading.Thread(target=pass_on_right).start()
 
                 passed_marker_ids.append(marker_id)
