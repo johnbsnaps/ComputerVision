@@ -140,7 +140,7 @@ global FORWARD_4_FEET
 global FORWARD_1_FOOT
 
 ROTATE_90 = 1.1
-FORWARD_4_FEET = 2.4
+FORWARD_4_FEET = 2.2
 FORWARD_1_FOOT = 1.4
 
 
@@ -153,6 +153,7 @@ def pass_on_left():
     turn_right(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
     turn_left(ROTATE_90)
+    MOVING = False
 
 def pass_on_right():
     # Create a movement sequence for the right side
@@ -163,6 +164,7 @@ def pass_on_right():
     turn_left(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
     turn_right(ROTATE_90)
+    MOVING = False
 
 global MOVING
 MOVING = False
