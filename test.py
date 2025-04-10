@@ -227,3 +227,4 @@ finally:
     cv2.destroyAllWindows()
     stop()
     maestro.close()
+
