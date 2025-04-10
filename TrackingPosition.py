@@ -100,7 +100,7 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
 
-def center_marker_in_frame(frame, corners, threshold=20):
+def center_marker_in_frame(frame, corners, threshold=10):
     global current_pan, current_tilt
 
     h, w, _ = frame.shape
@@ -137,7 +137,7 @@ global ROTATE_90
 global FORWARD_4_FEET
 global FORWARD_1_FOOT
 
-ROTATE_90 = 1.4
+ROTATE_90 = 1.2
 FORWARD_4_FEET = 3
 FORWARD_1_FOOT = 1
 
