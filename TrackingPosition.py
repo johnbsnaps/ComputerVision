@@ -138,8 +138,8 @@ global FORWARD_4_FEET
 global FORWARD_1_FOOT
 
 ROTATE_90 = 1.1
-FORWARD_4_FEET = 2.70
-FORWARD_1_FOOT = 1.5
+FORWARD_4_FEET = 2.4
+FORWARD_1_FOOT = 1.4
 
 
 def pass_on_left():
