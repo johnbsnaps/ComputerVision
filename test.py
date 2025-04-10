@@ -21,17 +21,16 @@ maestro = Controller()
 maestro.setTarget(LEFT_WHEEL, NEUTRAL)
 maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
 
-# Initializes RealSense camera
+# Initialize RealSense camera
 pipeline = rs.pipeline()
 config = rs.config()
 config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
 pipeline.start(config)
 time.sleep(1)
 
-# ArUco marker
+# ArUco marker setup
 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 parameters = cv2.aruco.DetectorParameters()
-
 camera_matrix = np.array([[615, 0, 320], [0, 615, 240], [0, 0, 1]])
 dist_coeffs = np.zeros((5, 1))
 
@@ -71,7 +70,6 @@ try:
 
         frame = np.asanyarray(color_frame.get_data())
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
 
         if ids is not None:
@@ -97,6 +95,7 @@ try:
                 side = "left" if marker_id % 2 else "right"
                 cv2.putText(frame, f"Pass on the {side}", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+
                 print(f"Passing marker {marker_id} on the {side}, Pos: X={x:.2f}, Y={y:.2f}")
 
                 # Turn then move forward
@@ -104,8 +103,8 @@ try:
                     turn_left(0.4)
                 else:
                     turn_right(0.4)
-                move_forward(1.2)
 
+                move_forward(1.2)
                 passed_marker_ids.append(marker_id)
 
                 if len(passed_marker_ids) >= 4:
