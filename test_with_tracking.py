@@ -128,10 +128,10 @@ def pass_on_right():
     turn_right(ROTATE_90)
     move_forward(FORWARD_1_FOOT)
     turn_left(ROTATE_90)
-    move_forward(FORWARD_4_FEET))
-    turn_right(ROTATE_90)
-    move_forward(FORWARD_1_FOOT)
+    move_forward(FORWARD_4_FEET)
     turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
 
     
 
