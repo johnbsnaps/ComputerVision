@@ -183,7 +183,7 @@ try:
 
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         
-        if ids is not None:
+        if ids is not None and MOVING == False:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
@@ -209,7 +209,7 @@ try:
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-            for marker_id in ids and MOVING == False:
+            for marker_id in ids:
                 if marker_id in passed_marker_ids:
                     continue  # Skip if already passed
 
