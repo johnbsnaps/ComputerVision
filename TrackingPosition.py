@@ -99,7 +99,7 @@ def move_forward(duration=1.0):
     maestro.setTarget(STRAIGHT, FORWARD)
     time.sleep(duration)
     stop()
-     
+
 def center_marker_in_frame(frame, corners, threshold=20):
     global current_pan, current_tilt
 
@@ -143,23 +143,24 @@ FORWARD_1_FOOT = 1
 
 
 def pass_on_left():
-    # Creating separate thread for robot movement
-    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
-    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_4_FEET,)).start()
-    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
-    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
+    # Create a movement sequence for the left side
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_4_FEET)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
 
 def pass_on_right():
-    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
-    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_4_FEET,)).start()
-    threading.Thread(target=turn_left, args=(ROTATE_90,)).start()
-    threading.Thread(target=move_forward, args=(FORWARD_1_FOOT,)).start()
-    threading.Thread(target=turn_right, args=(ROTATE_90,)).start()
+    # Create a movement sequence for the right side
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_4_FEET)
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
 
 # Main loop
 try:
@@ -174,42 +175,18 @@ try:
 
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
         
-
         if ids is not None:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
-            
-            idx = 0
-            centered = False
-            centering_iterations = 10
-            
-            for x in range (centering_iterations):
-                frames = pipeline.wait_for_frames()
-                color_frame = frames.get_color_frame()
-                if not color_frame:
-                    continue
 
-                frame = np.asanyarray(color_frame.get_data())
-                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-                new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
-                if new_corners and new_ids is not None and len(new_ids) > idx:
-                    center_marker_in_frame(frame, [new_corners[idx]])
-                    time.sleep(.1)
-
-                cv2.imshow("Centering", frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
-            
-
-            for i, marker_id in enumerate(ids):
+            for marker_id in ids:
                 if marker_id in passed_marker_ids:
                     continue  # Skip if already passed
 
                 # Estimate pose (marker size: 0.055m)
                 rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(
-                    [corners[i]], 0.055, camera_matrix, dist_coeffs
+                    [corners[0]], 0.055, camera_matrix, dist_coeffs
                 )
                 cv2.drawFrameAxes(frame, camera_matrix, dist_coeffs, rvec, tvec, 0.03)
 
@@ -223,11 +200,11 @@ try:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
                 print(f"Passing marker {marker_id} on the {side}, Pos: X={x:.2f}, Y={y:.2f}")
 
-                # Turn then move forward
+                # Call movement functions in a separate thread
                 if side == "left":
-                    pass_on_left()
+                    threading.Thread(target=pass_on_left).start()
                 else:
-                    pass_on_right()
+                    threading.Thread(target=pass_on_right).start()
 
                 passed_marker_ids.append(marker_id)
 
