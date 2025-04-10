@@ -106,6 +106,34 @@ def center_marker_in_frame(frame, corners, threshold=20):
 
     return not moved  # Return True when centered
 
+global ROTATE_90
+global FORWARD_4_FEET
+global FORWARD_1_FOOT
+
+ROTATE_90 = 1.4
+FORWARD_4_FEET = 3
+FORWARD_1_FOOT = 1
+
+
+def pass_on_left():
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_4_FEET)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+    
+def pass_on_right():
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_4_FEET))
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+
+    
 
 # Main loop
 try:
@@ -142,6 +170,7 @@ try:
                 new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
                 if new_corners and new_ids is not None and len(new_ids) > idx:
                     center_marker_in_frame(frame, [new_corners[idx]])
+                    time.sleep(.1)
 
                 cv2.imshow("Centering", frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -170,22 +199,10 @@ try:
 
                 # Turn then move forward
                 if side == "left":
-                    turn_left(1.4)
-                    move_forward(1)
-                    turn_right(1.4)
-                    move_forward(3)
-                    turn_right(1.4)
-                    move_forward(1)
-                    turn_left(1.4)
+                    pass_on_left()
                     
                 else:
-                    turn_right(1.4)
-                    move_forward(1)
-                    turn_left(1.4)
-                    move_forward(3)
-                    turn_right(1.4)
-                    move_forward(1)
-                    turn_left(1.4)
+                    pass_on_right()
 
                 passed_marker_ids.append(marker_id)
 
