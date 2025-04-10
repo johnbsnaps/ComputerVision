@@ -80,7 +80,7 @@ dist_coeffs = np.zeros((5, 1))
 def stop():
     maestro.setTarget(STRAIGHT, NEUTRAL)
     maestro.setTarget(ROTATE, NEUTRAL)
-    time.sleep(1)
+    time.sleep(3)
 
 def turn_left(duration=0.5):
     print("Turning left...")
