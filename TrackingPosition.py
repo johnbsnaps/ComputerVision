@@ -179,6 +179,28 @@ try:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
+            
+            idx = 0
+            centered = False
+            centering_iterations = 25
+            
+            for x in range (centering_iterations):
+                frames = pipeline.wait_for_frames()
+                color_frame = frames.get_color_frame()
+                if not color_frame:
+                    continue
+
+                frame = np.asanyarray(color_frame.get_data())
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+                new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+                if new_corners and new_ids is not None and len(new_ids) > idx:
+                    center_marker_in_frame(frame, [new_corners[idx]])
+                    time.sleep(.1)
+
+                cv2.imshow("Centering", frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
 
             for marker_id in ids:
                 if marker_id in passed_marker_ids:
