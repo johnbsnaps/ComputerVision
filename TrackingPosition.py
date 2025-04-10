@@ -164,6 +164,9 @@ def pass_on_right():
     move_forward(FORWARD_1_FOOT)
     turn_right(ROTATE_90)
 
+global MOVING
+MOVING = false
+
 # Main loop
 try:
     while True:
@@ -206,7 +209,7 @@ try:
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-            for marker_id in ids:
+            for marker_id in ids and MOVING == False:
                 if marker_id in passed_marker_ids:
                     continue  # Skip if already passed
 
@@ -239,8 +242,10 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
+                    MOVING = True
                     threading.Thread(target=pass_on_left).start()
                 else:
+                    MOVING = True
                     threading.Thread(target=pass_on_right).start()
 
                 passed_marker_ids.append(marker_id)
