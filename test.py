@@ -5,12 +5,23 @@ import pyrealsense2 as rs
 from maestro import Controller
 
 # Maestro channel assignments
-LEFT_WHEEL = 0
-RIGHT_WHEEL = 1
+STRAIGHT = 0
+ROTATE = 1
 
 # Servo constants
+PAN = 3
+TILT = 4
+PAN_CENTER = 6000
+TILT_CENTER = 6000
+PAN_RANGE = 300  # how far to pan left/right
+TILT_RANGE = 200  # how far to tilt up/down
+
+# Current position tracking
+current_pan = PAN_CENTER
+current_tilt = TILT_CENTER
+
 NEUTRAL = 6000
-FORWARD = 5000
+FORWARD = 5000  
 BACKWARD = 7000
 
 # Tracker for markers
@@ -18,8 +29,10 @@ passed_marker_ids = []
 
 # Initialize Maestro controller
 maestro = Controller()
-maestro.setTarget(LEFT_WHEEL, NEUTRAL)
-maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
+maestro.setTarget(STRAIGHT, NEUTRAL)
+maestro.setTarget(ROTATE, NEUTRAL)
+maestro.setTarget(PAN, PAN_CENTER)
+maestro.setTarget(TILT, TILT_CENTER)
 
 # Initializes RealSense camera
 pipeline = rs.pipeline()
@@ -37,29 +50,90 @@ dist_coeffs = np.zeros((5, 1))
 
 # Movement helpers
 def stop():
-    maestro.setTarget(LEFT_WHEEL, NEUTRAL)
-    maestro.setTarget(RIGHT_WHEEL, NEUTRAL)
+    maestro.setTarget(STRAIGHT, NEUTRAL)
+    maestro.setTarget(ROTATE, NEUTRAL)
+    time.sleep(1)
 
 def turn_left(duration=0.5):
     print("Turning left...")
-    maestro.setTarget(LEFT_WHEEL, BACKWARD)
-    maestro.setTarget(RIGHT_WHEEL, FORWARD)
+    maestro.setTarget(ROTATE, BACKWARD)
     time.sleep(duration)
     stop()
 
 def turn_right(duration=0.5):
     print("Turning right...")
-    maestro.setTarget(LEFT_WHEEL, FORWARD)
-    maestro.setTarget(RIGHT_WHEEL, BACKWARD)
+    maestro.setTarget(ROTATE, FORWARD)
     time.sleep(duration)
     stop()
 
 def move_forward(duration=1.0):
     print("Moving forward...")
-    maestro.setTarget(LEFT_WHEEL, FORWARD)
-    maestro.setTarget(RIGHT_WHEEL, FORWARD)
+    maestro.setTarget(STRAIGHT, FORWARD)
     time.sleep(duration)
     stop()
+     
+def center_marker_in_frame(frame, corners, threshold=20):
+    global current_pan, current_tilt
+
+    h, w, _ = frame.shape
+    center_x = w // 2
+    center_y = h // 2
+
+    marker = corners[0][0]
+    marker_x = int(np.mean(marker[:, 0]))
+    marker_y = int(np.mean(marker[:, 1]))
+    
+
+    offset_x = marker_x - center_x
+    offset_y = marker_y - center_y
+    
+    print(offset_x)
+    print(offset_y)
+
+    # Update pan/tilt only if offset is above threshold
+    moved = False
+    if abs(offset_x) > threshold:
+        current_pan -= int(offset_x * 0.4)
+        current_pan = max(min(current_pan, PAN_CENTER + PAN_RANGE), PAN_CENTER - PAN_RANGE)
+        maestro.setTarget(PAN, current_pan)
+        moved = True
+
+    if abs(offset_y) > threshold:
+        current_tilt += int(offset_y * 0.4)
+        current_tilt = max(min(current_tilt, TILT_CENTER + TILT_RANGE), TILT_CENTER - TILT_RANGE)
+        maestro.setTarget(TILT, current_tilt)
+        moved = True
+
+    return not moved  # Return True when centered
+
+global ROTATE_90
+global FORWARD_4_FEET
+global FORWARD_1_FOOT
+
+ROTATE_90 = 1.4
+FORWARD_4_FEET = 3
+FORWARD_1_FOOT = 1
+
+
+def pass_on_left():
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_4_FEET)
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+    
+def pass_on_right():
+    turn_right(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_4_FEET)
+    turn_left(ROTATE_90)
+    move_forward(FORWARD_1_FOOT)
+    turn_right(ROTATE_90)
+
+    
 
 # Main loop
 try:
@@ -73,11 +147,35 @@ try:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         corners, ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+        
 
         if ids is not None:
             ids = ids.flatten()
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             print("Detected marker IDs:", ids)
+            
+            idx = 0
+            centered = False
+            centering_iterations = 10
+            
+            for x in range (centering_iterations):
+                frames = pipeline.wait_for_frames()
+                color_frame = frames.get_color_frame()
+                if not color_frame:
+                    continue
+
+                frame = np.asanyarray(color_frame.get_data())
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+                new_corners, new_ids, _ = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=parameters)
+                if new_corners and new_ids is not None and len(new_ids) > idx:
+                    center_marker_in_frame(frame, [new_corners[idx]])
+                    time.sleep(.1)
+
+                cv2.imshow("Centering", frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+            
 
             for i, marker_id in enumerate(ids):
                 if marker_id in passed_marker_ids:
@@ -101,10 +199,10 @@ try:
 
                 # Turn then move forward
                 if side == "left":
-                    turn_left(0.4)
+                    pass_on_left()
+                    
                 else:
-                    turn_right(0.4)
-                move_forward(1.2)
+                    pass_on_right()
 
                 passed_marker_ids.append(marker_id)
 
