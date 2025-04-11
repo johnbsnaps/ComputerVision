@@ -146,6 +146,8 @@ global FORWARD_4_FEET
 global FORWARD_1_FOOT
 global ROTATE_45
 global FORWARD_2_FEET
+global CAMERA_LEFT
+global CAMERA_RIGHT
 
 FACING = "FORWARD"
 ROTATE_90 = 1.2
@@ -153,6 +155,9 @@ FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
 FORWARD_2_FEET = 1.7
 ROTATE_45 = .8
+
+CAMERA_LEFT = 5000
+CAMERA_RIGHT = 7000
 
 
 def pass_on_left():
@@ -190,7 +195,18 @@ def zig_left():
         move_forward(FORWARD_2_FEET)
         turn_right(ROTATE_90)
         move_forward(FORWARD_1_FOOT)
-        turn_left(ROTATE_45)
+    elif (FACING == "LEFT"):
+        move_forward(FORWARD_2_FEET)
+        turn_right(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+    elif (FACING == "RIGHT"):
+        turn_left(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+        turn_right(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+    maestro.setTarget(PAN, CAMERA_LEFT)
+    FACING = "RIGHT"
+        
 
 def zig_right():
     if (FACING == "FORWARD"):
@@ -198,7 +214,17 @@ def zig_right():
         move_forward(FORWARD_2_FEET)
         turn_left(ROTATE_90)
         move_forward(FORWARD_1_FOOT)
-        turn_right(ROTATE_45)
+    elif (FACING == "LEFT"):
+        turn_right(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+        turn_left(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+    elif (FACING == "RIGHT"):
+        move_forward(FORWARD_2_FEET)
+        turn_left(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+    maestro.setTarget(PAN, CAMERA_RIGHT)
+    FACING = "LEFT"
 
 
 # Main loop
