@@ -89,7 +89,7 @@ def stop():
 def turn_left(duration=0.5):
     print("Turning left...")
     maestro.setTarget(ROTATE, BACKWARD)
-    time.sleep(duration+.05)
+    time.sleep(duration)
     stop()
 
 def turn_right(duration=0.5):
