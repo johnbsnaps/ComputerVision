@@ -152,7 +152,7 @@ ROTATE_90 = 1.4
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.2
 FORWARD_2_FEET = 1.5
-ROTATE_45 = .7
+ROTATE_45 = .9
 
 
 def pass_on_left():
@@ -190,7 +190,7 @@ def zig_left():
         move_forward(FORWARD_2_FEET)
         turn_right(ROTATE_90)
         move_forward(FORWARD_1_FOOT)
-        turn_right(ROTATE_45)
+        turn_left(ROTATE_45)
 
 def zig_right():
     if (FACING == "FORWARD"):
@@ -198,7 +198,7 @@ def zig_right():
         move_forward(FORWARD_2_FEET)
         turn_left(ROTATE_90)
         move_forward(FORWARD_1_FOOT)
-        turn_left(ROTATE_45)
+        turn_right(ROTATE_45)
 
 
 # Main loop
