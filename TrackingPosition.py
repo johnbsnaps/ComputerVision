@@ -190,6 +190,7 @@ def pass_on_right():
     print(f"Done Moving, MOVING is now {MOVING}!" )
     
 def zig_left():
+    global FACING
     if (FACING == "FORWARD"):
         turn_left(ROTATE_45)
         move_forward(FORWARD_2_FEET)
@@ -209,6 +210,7 @@ def zig_left():
         
 
 def zig_right():
+    global FACING
     if (FACING == "FORWARD"):
         turn_right(ROTATE_45)
         move_forward(FORWARD_2_FEET)
