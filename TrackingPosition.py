@@ -152,7 +152,7 @@ ROTATE_90 = 1.3
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
 FORWARD_2_FEET = 1.7
-ROTATE_45 = .9
+ROTATE_45 = .7
 
 
 def pass_on_left():
