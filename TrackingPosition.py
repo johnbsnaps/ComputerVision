@@ -89,7 +89,7 @@ def stop():
 def turn_left(duration=0.5):
     print("Turning left...")
     maestro.setTarget(ROTATE, BACKWARD)
-    time.sleep(duration+.01)
+    time.sleep(duration+.02)
     stop()
 
 def turn_right(duration=0.5):
@@ -153,7 +153,7 @@ FACING = "FORWARD"
 ROTATE_90 = 1.2
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
-FORWARD_2_FEET = 1.7
+FORWARD_2_FEET = 1.72
 ROTATE_45 = .8
 
 CAMERA_LEFT = 7500
