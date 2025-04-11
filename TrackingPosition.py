@@ -151,7 +151,7 @@ FACING = "FORWARD"
 ROTATE_90 = 1.4
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.2
-FORWARD_2_FEET = 1.4
+FORWARD_2_FEET = 1.5
 ROTATE_45 = .7
 
 
@@ -189,7 +189,7 @@ def zig_left():
         turn_left(ROTATE_45)
         move_forward(FORWARD_2_FEET)
         turn_right(ROTATE_90)
-        move_forward(FORWARD_2_FEET)
+        move_forward(FORWARD_1_FOOT)
         turn_right(ROTATE_45)
 
 def zig_right():
@@ -197,7 +197,7 @@ def zig_right():
         turn_right(ROTATE_45)
         move_forward(FORWARD_2_FEET)
         turn_left(ROTATE_90)
-        move_forward(FORWARD_2_FEET)
+        move_forward(FORWARD_1_FOOT)
         turn_left(ROTATE_45)
 
 
