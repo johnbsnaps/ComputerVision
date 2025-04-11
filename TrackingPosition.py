@@ -84,7 +84,7 @@ dist_coeffs = np.zeros((5, 1))
 def stop():
     maestro.setTarget(STRAIGHT, NEUTRAL)
     maestro.setTarget(ROTATE, NEUTRAL)
-    time.sleep(3)
+    time.sleep(2)
 
 def turn_left(duration=0.5):
     print("Turning left...")
@@ -139,13 +139,20 @@ def center_marker_in_frame(frame, corners, threshold=10):
 
 #values for movement
 
+global FACING
+
 global ROTATE_90
 global FORWARD_4_FEET
 global FORWARD_1_FOOT
+global ROTATE_45
+global FORWARD_2_FEET
 
+FACING = "FORWARD"
 ROTATE_90 = 1.4
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.2
+FORWARD_2_FEET = 1.4
+ROTATE_45 = .7
 
 
 def pass_on_left():
@@ -176,6 +183,22 @@ def pass_on_right():
     turn_right(ROTATE_90)
     MOVING = False  # Movement completed
     print(f"Done Moving, MOVING is now {MOVING}!" )
+    
+def zig_left():
+    if (FACING == "FORWARD"):
+        turn_left(ROTATE_45)
+        move_forward(FORWARD_2_FEET)
+        turn_right(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+        turn_right(ROTATE_45)
+
+def zig_right():
+    if (FACING == "FORWARD"):
+        turn_right(ROTATE_45)
+        move_forward(FORWARD_2_FEET)
+        turn_left(ROTATE_90)
+        move_forward(FORWARD_2_FEET)
+        turn_left(ROTATE_45)
 
 
 # Main loop
@@ -253,9 +276,9 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
-                    threading.Thread(target=pass_on_left).start()
+                    threading.Thread(target=zig_left).start()
                 else:
-                    threading.Thread(target=pass_on_right).start()
+                    threading.Thread(target=zig_right).start()
 
                 passed_marker_ids.append(marker_id)
 
