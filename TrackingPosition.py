@@ -276,9 +276,11 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
-                    threading.Thread(target=zig_left).start()
+                    zig_left()
+                    #threading.Thread(target=zig_left).start()
                 else:
-                    threading.Thread(target=zig_right).start()
+                    #threading.Thread(target=zig_right).start()
+                    zig_right()
 
                 passed_marker_ids.append(marker_id)
 
