@@ -152,11 +152,12 @@ global CAMERA_LEFT
 global CAMERA_RIGHT
 
 FACING = "FORWARD"
-ROTATE_90_LEFT = 2.4
+FIRST_MOVE = 2.4
+ROTATE_90_LEFT = 2.5
 ROTATE_90_RIGHT = 2.2
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
-FORWARD_2_FEET = 2.4
+FORWARD_2_FEET = 2.6
 ROTATE_45 = 1.5
 
 CAMERA_LEFT = 7600
@@ -196,7 +197,7 @@ def zig_left():
     global FACING
     if (FACING == "FORWARD"):
         turn_left(ROTATE_45)
-        move_forward(FORWARD_2_FEET)
+        move_forward(FIRST_MOVE)
         turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "LEFT"):
@@ -204,7 +205,7 @@ def zig_left():
         turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "RIGHT"):
-        turn_left(ROTATE_90)
+        turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
         turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
@@ -216,11 +217,11 @@ def zig_right():
     global FACING
     if (FACING == "FORWARD"):
         turn_right(ROTATE_45)
-        move_forward(FORWARD_2_FEET)
+        move_forward(FIRST_MOVE)
         turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "LEFT"):
-        turn_right(ROTATE_90)
+        turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
         turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
