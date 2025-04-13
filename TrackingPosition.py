@@ -28,6 +28,8 @@ current_tilt = TILT_CENTER
 NEUTRAL = 6000
 FORWARD = 5000  
 BACKWARD = 7000
+SPIN_SPEED_RIGHT = 5800
+SPIN_SPEED_LEFT = 7200
 
 # Tracker for markers
 passed_marker_ids = []
@@ -88,13 +90,13 @@ def stop():
 
 def turn_left(duration=0.5):
     print("Turning left...")
-    maestro.setTarget(ROTATE, BACKWARD)
+    maestro.setTarget(ROTATE, SPIN_SPEED_LEFT)
     time.sleep(duration+.02)
     stop()
 
 def turn_right(duration=0.5):
     print("Turning right...")
-    maestro.setTarget(ROTATE, FORWARD)
+    maestro.setTarget(ROTATE, SPIN_SPEED_RIGHT)
     time.sleep(duration - 0.18)
     stop()
 
@@ -150,11 +152,11 @@ global CAMERA_LEFT
 global CAMERA_RIGHT
 
 FACING = "FORWARD"
-ROTATE_90 = 1.2
+ROTATE_90 = 2.0
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
 FORWARD_2_FEET = 1.9
-ROTATE_45 = .8
+ROTATE_45 = 1.5
 
 CAMERA_LEFT = 7500
 CAMERA_RIGHT = 4500
