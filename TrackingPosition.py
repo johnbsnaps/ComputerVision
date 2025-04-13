@@ -17,7 +17,7 @@ MOVING = False
 PAN = 3
 TILT = 4
 PAN_CENTER = 6000
-TILT_CENTER = 4600
+TILT_CENTER = 4400
 PAN_RANGE = 300  # how far to pan left/right
 TILT_RANGE = 200  # how far to tilt up/down
 
@@ -152,27 +152,28 @@ global CAMERA_LEFT
 global CAMERA_RIGHT
 
 FACING = "FORWARD"
-ROTATE_90 = 2.0
+ROTATE_90_LEFT = 2.0
+ROTATE_90_RIGHT = 2.2
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
 FORWARD_2_FEET = 2.4
 ROTATE_45 = 1.5
 
-CAMERA_LEFT = 7500
-CAMERA_RIGHT = 4500
+CAMERA_LEFT = 7600
+CAMERA_RIGHT = 4400
 
 
 def pass_on_left():
     global MOVING
     MOVING = True  # Start movement
     # Create a movement sequence for the left side
-    turn_left(ROTATE_90)
+    turn_left(ROTATE_90_LEFT)
     move_forward(FORWARD_1_FOOT)
-    turn_right(ROTATE_90)
+    turn_right(ROTATE_90_RIGHT)
     move_forward(FORWARD_4_FEET)
-    turn_right(ROTATE_90)
+    turn_right(ROTATE_90_RIGHT)
     move_forward(FORWARD_1_FOOT)
-    turn_left(ROTATE_90)
+    turn_left(ROTATE_90_LEFT)
     MOVING = False  # Movement completed
     print(f"Done Moving, MOVING is now {MOVING}!" )
 
@@ -196,16 +197,16 @@ def zig_left():
     if (FACING == "FORWARD"):
         turn_left(ROTATE_45)
         move_forward(FORWARD_2_FEET)
-        turn_right(ROTATE_90)
+        turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "LEFT"):
         move_forward(FORWARD_2_FEET)
-        turn_right(ROTATE_90)
+        turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "RIGHT"):
         turn_left(ROTATE_90)
         move_forward(FORWARD_2_FEET)
-        turn_right(ROTATE_90)
+        turn_right(ROTATE_90_RIGHT)
         move_forward(FORWARD_2_FEET)
     maestro.setTarget(PAN, CAMERA_LEFT)
     FACING = "RIGHT"
@@ -216,16 +217,16 @@ def zig_right():
     if (FACING == "FORWARD"):
         turn_right(ROTATE_45)
         move_forward(FORWARD_2_FEET)
-        turn_left(ROTATE_90)
+        turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "LEFT"):
         turn_right(ROTATE_90)
         move_forward(FORWARD_2_FEET)
-        turn_left(ROTATE_90)
+        turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
     elif (FACING == "RIGHT"):
         move_forward(FORWARD_2_FEET)
-        turn_left(ROTATE_90)
+        turn_left(ROTATE_90_LEFT)
         move_forward(FORWARD_2_FEET)
     maestro.setTarget(PAN, CAMERA_RIGHT)
     FACING = "LEFT"
