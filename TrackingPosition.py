@@ -29,7 +29,7 @@ NEUTRAL = 6000
 FORWARD = 5000  
 BACKWARD = 7000
 SPIN_SPEED_RIGHT = 5200
-SPIN_SPEED_LEFT = 6800
+SPIN_SPEED_LEFT = 6900
 
 # Tracker for markers
 passed_marker_ids = []
