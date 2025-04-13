@@ -28,8 +28,8 @@ current_tilt = TILT_CENTER
 NEUTRAL = 6000
 FORWARD = 5000  
 BACKWARD = 7000
-SPIN_SPEED_RIGHT = 5500
-SPIN_SPEED_LEFT = 7500
+SPIN_SPEED_RIGHT = 5200
+SPIN_SPEED_LEFT = 6800
 
 # Tracker for markers
 passed_marker_ids = []
