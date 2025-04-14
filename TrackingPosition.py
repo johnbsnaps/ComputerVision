@@ -308,6 +308,8 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
+                    if(len(passed_marker_ids) > 2):
+                        ROTATE_90_LEFT = 2.6
                     zig_left()
                     #threading.Thread(target=zig_left).start()
                 else:
