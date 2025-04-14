@@ -305,16 +305,23 @@ try:
                 cv2.putText(frame, f"Pass on the {side}", (10, 60),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
                 print(f"Passing marker {marker_id} on the {side}, Pos: X={x:.2f}, Y={y:.2f}")
+                
+                times_zagged = 0
 
                 # Call movement functions in a separate thread
                 if side == "left":
-                    if(len(passed_marker_ids) > 2):
+                    if(times_zagged) > 3:
                         ROTATE_90_LEFT = 2.6
+                    times_zagged += 1
                     zig_left()
                     #threading.Thread(target=zig_left).start()
                 else:
-                    #threading.Thread(target=zig_right).start()
+                    if(times_zagged) > 3:
+                        ROTATE_90_LEFT = 2.6
+                    times_zagged += 1
                     zig_right()
+                    #threading.Thread(target=zig_right).start()
+
 
                 passed_marker_ids.append(marker_id)
 
