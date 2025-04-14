@@ -232,6 +232,7 @@ def zig_right():
     maestro.setTarget(PAN, CAMERA_RIGHT)
     FACING = "LEFT"
 
+times_zagged = 0
 
 # Main loop
 try:
@@ -306,7 +307,6 @@ try:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
                 print(f"Passing marker {marker_id} on the {side}, Pos: X={x:.2f}, Y={y:.2f}")
                 
-                times_zagged = 0
 
                 # Call movement functions in a separate thread
                 if side == "left":
