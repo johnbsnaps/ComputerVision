@@ -310,16 +310,9 @@ try:
 
                 # Call movement functions in a separate thread
                 if side == "left":
-                    if(times_zagged) > 3:
-                        ROTATE_90_LEFT = 2.6
-                    times_zagged += 1
                     zig_left()
                     #threading.Thread(target=zig_left).start()
                 else:
-                    if(times_zagged) > 3:
-                        ROTATE_90_LEFT = 2.6
-                    print(times_zagged)
-                    times_zagged += 1
                     zig_right()
                     #threading.Thread(target=zig_right).start()
 
