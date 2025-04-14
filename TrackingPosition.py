@@ -153,7 +153,7 @@ global CAMERA_RIGHT
 
 FACING = "FORWARD"
 FIRST_MOVE = 2.7
-ROTATE_90_LEFT = 2.4
+ROTATE_90_LEFT = 2.45
 ROTATE_90_RIGHT = 2.13
 FORWARD_4_FEET = 1.7
 FORWARD_1_FOOT = 1.5
@@ -318,6 +318,7 @@ try:
                 else:
                     if(times_zagged) > 3:
                         ROTATE_90_LEFT = 2.6
+                    print(times_zagged)
                     times_zagged += 1
                     zig_right()
                     #threading.Thread(target=zig_right).start()
