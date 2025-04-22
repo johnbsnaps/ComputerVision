@@ -3,7 +3,7 @@ import numpy as np
 import time
 import pickle
 import pyrealsense2 as rs
-from maestro import Controller
+from FinalProject.maestro import Controller
 import threading
 
 
@@ -21,6 +21,7 @@ STRAIGHT = 0
 ROTATE = 1
 PAN = 3
 TILT = 4
+RIGHT_ARM = 5
 
 # Maestro Server Speeds
 NEUTRAL = 6000
@@ -30,6 +31,8 @@ SPIN_SPEED_RIGHT = 5200
 SPIN_SPEED_LEFT = 6850
 PAN_CENTER = 6000
 TILT_CENTER = 4400
+ARM_DOWN = 4500
+ARM_UP = 7500
 
 # Initialize Maestro controller with starting values
 maestro = Controller()
@@ -37,6 +40,7 @@ maestro.setTarget(STRAIGHT, NEUTRAL)
 maestro.setTarget(ROTATE, NEUTRAL)
 maestro.setTarget(PAN, PAN_CENTER)
 maestro.setTarget(TILT, TILT_CENTER)
+maestro.setTarget(RIGHT_ARM, ARM_DOWN)
 
 # ArUco marker setup, loads the library, sets default viewing info, assigns 3D space values and then tells
 # the camera there is no distortion
@@ -54,6 +58,7 @@ ARRIVED_AT_MARKER = False
 DROPPED_RING = False
 FOUND_START = False
 AT_START = False
+RIGHT_ARM_UP = False
 
 
 # Globals for Identifying Object
@@ -103,6 +108,11 @@ def move_forward(duration=1.0):
     time.sleep(duration)
     stop()
 
+def move_arm():
+    if(RIGHT_ARM_UP):
+        maestro.setTarget(RIGHT_ARM, ARM_DOWN)
+    else: maestro.setTarget(RIGHT_ARM, ARM_UP)
+
 # Uses the setup Identifier function, and then looks for the object
 def identify_object(frame):
     global TARGET_ID, IDENTIFIED_OBJECT
@@ -135,6 +145,7 @@ def identify_object(frame):
     if best_match_count > 15:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
+        move_arm()
         print(f"Identified object ID: {TARGET_ID}")
     else:
         TARGET_ID = None
@@ -239,7 +250,8 @@ def move_toward_marker(frame, marker_id):
 
 
 def drop_ring():
-    return
+    move_arm()
+    DROPPED_RING = True
 
 
 
