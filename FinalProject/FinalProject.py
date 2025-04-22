@@ -32,7 +32,7 @@ SPIN_SPEED_LEFT = 6850
 PAN_CENTER = 6000
 TILT_CENTER = 4500
 ARM_DOWN = 4500
-ARM_UP = 7500
+ARM_UP = 8000
 
 # Initialize Maestro controller with starting values
 maestro = Controller()
@@ -203,11 +203,11 @@ def find_markers(frame, target_id):
             elif center_x < frame_center_x:
                 # Marker is to the left, rotate left slowly
                 print(f"Marker {target_id} found, adjusting left...")
-                turn_left(duration=0.5)
+                turn_left(duration=0.2)
             else:
                 # Marker is to the right, rotate right slowly
                 print(f"Marker {target_id} found, adjusting right...")
-                turn_right(duration=0.5)
+                turn_right(duration=0.2)
             return False
         else:
             # Marker not in visible IDs, keep rotating
@@ -217,7 +217,7 @@ def find_markers(frame, target_id):
     else:
         # No markers detected at all
         print(f"Marker {target_id} not yet found, rotating...")
-        turn_left(duration=1)
+        turn_left(duration=.5)
         return False
 
 ## Detects the markers we are supposed to be moving towards, then if we are too far away, checks to make sure
@@ -261,13 +261,13 @@ def move_toward_marker(frame, marker_id):
         # Adjust position slightly if off-center
         if abs(center_x - frame_center_x) <= margin:
             print(f"Moving forward toward marker {marker_id}...")
-            move_forward(duration=1)
+            move_forward(duration=.5)
         elif center_x < frame_center_x:
             print(f"Marker {marker_id} drifting left... adjusting.")
-            turn_left(duration=0.4)
+            turn_left(duration=0.2)
         else:
             print(f"Marker {marker_id} drifting right... adjusting.")
-            turn_right(duration=0.4)
+            turn_right(duration=0.2)
 
         return False
 
