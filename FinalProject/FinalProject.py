@@ -246,7 +246,7 @@ def move_toward_marker(frame, marker_id):
         if marker_percentage >= 15:
             if (marker_id == 0):
                 print("Back at the Start!")
-                AT_START == True
+                AT_START = True
                 return True
             else:
                 print("Arrived at marker.")
