@@ -164,6 +164,7 @@ def identify_object(frame):
     if best_match_count > 15:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
+        move_arm()
         print(f"Identified object ID: {TARGET_ID}")
     else:
         TARGET_ID = None
