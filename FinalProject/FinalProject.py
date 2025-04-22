@@ -74,7 +74,22 @@ def identifier_setup():
 
     # Load trained objects
     with open("trainedObjects.pkl", "rb") as f:
-        trained_objects = pickle.load(f)
+        raw_objects = pickle.load(f)
+
+    trained_objects = {}
+    for obj_id, obj_data in raw_objects.items():
+        # Rebuild cv2.KeyPoint objects from serialized format
+        kp_tuples = obj_data["keypoints"]
+        keypoints = [
+            cv2.KeyPoint(x=pt[0], y=pt[1], _size=size, _angle=angle, _response=response,
+                         _octave=octave, _class_id=class_id)
+            for (pt, size, angle, response, octave, class_id) in kp_tuples
+        ]
+        trained_objects[obj_id] = {
+            "name": obj_data["name"],
+            "keypoints": keypoints,
+            "descriptors": obj_data["descriptors"]
+        }
 
     # Initialize ORB and BFMatcher
     orb = cv2.ORB_create()

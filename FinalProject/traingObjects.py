@@ -67,7 +67,8 @@ while object_count < NUM_OBJECTS_TO_TRAIN:
     if drawing:
         cv2.rectangle(display_frame, start_point, end_point, (0, 255, 0), 2)
 
-    cv2.putText(display_frame, f"Object {object_count+1}/3 - Draw box", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2)
+    cv2.putText(display_frame, f"Object {object_count+1}/3 - Draw box", (10, 25),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2)
     cv2.imshow("Draw Object", display_frame)
 
     key = cv2.waitKey(1) & 0xFF
@@ -87,9 +88,15 @@ while object_count < NUM_OBJECTS_TO_TRAIN:
 
         if descriptors is not None:
             obj_name = input(f"Enter a name for object {object_count+1}: ")
+
+            # Convert keypoints to a serializable format
+            keypoints_serializable = [(
+                kp.pt, kp.size, kp.angle, kp.response, kp.octave, kp.class_id
+            ) for kp in keypoints]
+
             trained_objects[object_count + 1] = {
                 "name": obj_name,
-                "keypoints": keypoints,
+                "keypoints": keypoints_serializable,
                 "descriptors": descriptors
             }
 
