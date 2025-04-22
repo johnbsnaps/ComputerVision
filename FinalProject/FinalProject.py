@@ -203,21 +203,21 @@ def find_markers(frame, target_id):
             elif center_x < frame_center_x:
                 # Marker is to the left, rotate left slowly
                 print(f"Marker {target_id} found, adjusting left...")
-                turn_left(duration=0.25)
+                turn_left(duration=0.5)
             else:
                 # Marker is to the right, rotate right slowly
                 print(f"Marker {target_id} found, adjusting right...")
-                turn_right(duration=0.25)
+                turn_right(duration=0.5)
             return False
         else:
             # Marker not in visible IDs, keep rotating
             print(f"Marker {target_id} not yet found, rotating...")
-            turn_left(duration=0.3)
+            turn_left(duration=1)
             return False
     else:
         # No markers detected at all
         print(f"Marker {target_id} not yet found, rotating...")
-        turn_left(duration=0.3)
+        turn_left(duration=1)
         return False
 
 ## Detects the markers we are supposed to be moving towards, then if we are too far away, checks to make sure
@@ -261,13 +261,13 @@ def move_toward_marker(frame, marker_id):
         # Adjust position slightly if off-center
         if abs(center_x - frame_center_x) <= margin:
             print(f"Moving forward toward marker {marker_id}...")
-            move_forward(duration=.6)
+            move_forward(duration=1)
         elif center_x < frame_center_x:
             print(f"Marker {marker_id} drifting left... adjusting.")
-            turn_left(duration=0.1)
+            turn_left(duration=0.4)
         else:
             print(f"Marker {marker_id} drifting right... adjusting.")
-            turn_right(duration=0.1)
+            turn_right(duration=0.4)
 
         return False
 
