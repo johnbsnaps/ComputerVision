@@ -269,6 +269,7 @@ def move_toward_marker(frame, marker_id):
 
 
 def drop_ring():
+    global DROPPED_RING
     DROPPED_RING = True
     move_arm()
     print("Dropping Ring")
