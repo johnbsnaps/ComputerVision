@@ -30,7 +30,7 @@ BACKWARD = 7000
 SPIN_SPEED_RIGHT = 5200
 SPIN_SPEED_LEFT = 6850
 PAN_CENTER = 6000
-TILT_CENTER = 6000
+TILT_CENTER = 4500
 ARM_DOWN = 4500
 ARM_UP = 7500
 
@@ -131,6 +131,7 @@ def move_arm():
     else: 
         maestro.setTarget(RIGHT_ARM, ARM_UP)
         RIGHT_ARM_UP = True
+        time.sleep(4)
 
 # Uses the setup Identifier function, and then looks for the object
 def identify_object(frame):
