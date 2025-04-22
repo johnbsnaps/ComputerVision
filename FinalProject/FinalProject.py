@@ -175,6 +175,7 @@ def identify_object(frame):
 #the marker and then centers the marker within the frame.
 def find_markers(frame, target_id):
     global FOUND_MARKER
+    global FOUND_START
 
     # Detect markers in the frame
     corners, ids, _ = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)
@@ -195,6 +196,8 @@ def find_markers(frame, target_id):
             if abs(center_x - frame_center_x) <= margin:
                 print(f"Marker {target_id} centered.")
                 FOUND_MARKER = True
+                if (target_id == 0):
+                    FOUND_START = True
                 return True
             elif center_x < frame_center_x:
                 # Marker is to the left, rotate left slowly
