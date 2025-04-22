@@ -221,6 +221,7 @@ def find_markers(frame, target_id):
 ## Keep centered.
 def move_toward_marker(frame, marker_id):
     global ARRIVED_AT_MARKER
+    global AT_START
 
     # Detect markers again
     corners, ids, _ = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)
@@ -243,10 +244,15 @@ def move_toward_marker(frame, marker_id):
 
         # Check if the marker is big enough (i.e., we're close enough)
         if marker_percentage >= 15:
-            print("Arrived at marker.")
-            ARRIVED_AT_MARKER = True
-            stop()
-            return True
+            if (marker_id == 0):
+                print("Back at the Start!")
+                AT_START == True
+                return True
+            else:
+                print("Arrived at marker.")
+                ARRIVED_AT_MARKER = True
+                stop()
+                return True
 
         # Adjust position slightly if off-center
         if abs(center_x - frame_center_x) <= margin:
