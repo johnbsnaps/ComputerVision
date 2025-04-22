@@ -126,7 +126,10 @@ def move_forward(duration=1.0):
 def move_arm():
     if(RIGHT_ARM_UP):
         maestro.setTarget(RIGHT_ARM, ARM_DOWN)
-    else: maestro.setTarget(RIGHT_ARM, ARM_UP)
+        RIGHT_ARM_UP = False
+    else: 
+        maestro.setTarget(RIGHT_ARM, ARM_UP)
+        RIGHT_ARM_UP = True
 
 # Uses the setup Identifier function, and then looks for the object
 def identify_object(frame):
