@@ -30,7 +30,7 @@ BACKWARD = 7000
 SPIN_SPEED_RIGHT = 5200
 SPIN_SPEED_LEFT = 6850
 PAN_CENTER = 6000
-TILT_CENTER = 4400
+TILT_CENTER = 6000
 ARM_DOWN = 4500
 ARM_UP = 7500
 
@@ -81,10 +81,10 @@ def identifier_setup():
         # Rebuild cv2.KeyPoint objects from serialized format
         kp_tuples = obj_data["keypoints"]
         keypoints = [
-            cv2.KeyPoint(x=pt[0], y=pt[1], _size=size, _angle=angle, _response=response,
-                         _octave=octave, _class_id=class_id)
+            cv2.KeyPoint(pt[0], pt[1], size, angle, response, octave, class_id)
             for (pt, size, angle, response, octave, class_id) in kp_tuples
         ]
+
         trained_objects[obj_id] = {
             "name": obj_data["name"],
             "keypoints": keypoints,
