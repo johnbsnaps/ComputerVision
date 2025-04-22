@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 import pyrealsense2 as rs
-from maestro import Controller
+from FinalProject.maestro import Controller
 
 # Maestro channel assignments
 LEFT_WHEEL = 0
