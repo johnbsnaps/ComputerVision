@@ -124,6 +124,7 @@ def move_forward(duration=1.0):
     stop()
 
 def move_arm():
+    global RIGHT_ARM_UP
     if(RIGHT_ARM_UP):
         maestro.setTarget(RIGHT_ARM, ARM_DOWN)
         RIGHT_ARM_UP = False
