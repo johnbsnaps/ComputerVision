@@ -164,7 +164,6 @@ def identify_object(frame):
     if best_match_count > 15:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
-        move_arm()
         print(f"Identified object ID: {TARGET_ID}")
     else:
         TARGET_ID = None
@@ -269,8 +268,10 @@ def move_toward_marker(frame, marker_id):
 
 
 def drop_ring():
-    move_arm()
     DROPPED_RING = True
+    move_arm()
+    print("Dropping Ring")
+    time.sleep(2)
 
 
 
