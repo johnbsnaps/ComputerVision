@@ -237,7 +237,7 @@ def move_toward_marker(frame, marker_id):
         # Calculate center and area of the marker
         center_x = int(np.mean(corner[:, 0]))
         frame_center_x = frame.shape[1] // 2
-        margin = 20
+        margin = 40
 
         # Compute marker area
         marker_area = cv2.contourArea(corner.astype(np.int32))
@@ -247,7 +247,7 @@ def move_toward_marker(frame, marker_id):
         print(f"Marker size: {marker_percentage:.2f}% of frame.")
 
         # Check if the marker is big enough (i.e., we're close enough)
-        if marker_percentage >= 15:
+        if marker_percentage >= 12:
             if (marker_id == 0):
                 print("Back at the Start!")
                 AT_START = True
