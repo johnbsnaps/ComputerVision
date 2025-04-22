@@ -3,7 +3,7 @@ import numpy as np
 import time
 import pickle
 import pyrealsense2 as rs
-from FinalProject.maestro import Controller
+from maestro import Controller
 import threading
 
 
