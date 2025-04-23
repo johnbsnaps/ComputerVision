@@ -51,6 +51,10 @@ parameters = cv2.aruco.DetectorParameters()
 camera_matrix = np.array([[615, 0, 320], [0, 615, 240], [0, 0, 1]])
 dist_coeffs = np.zeros((5, 1))
 
+## Faces stuff
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+
 # Boolean Values to track current mission progress
 IDENTIFIED_OBJECT = False
 FOUND_MARKER = False
@@ -58,7 +62,9 @@ ARRIVED_AT_MARKER = False
 DROPPED_RING = False
 FOUND_START = False
 AT_START = False
+FOUND_FACE = False
 RIGHT_ARM_UP = False
+
 
 
 # Globals for Identifying Object
@@ -171,7 +177,30 @@ def identify_object(frame):
         TARGET_ID = None
         IDENTIFIED_OBJECT = False
         
-        
+
+## Scans for a human face first, starts the cleanup process
+def detect_face(frame):
+    global FOUND_FACE
+    # Convert the frame to grayscale (Haar cascades work on gray images)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Detect faces in the image
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+
+    # Iterate through all detected faces
+    for (x, y, w, h) in faces:
+        # Draw a bounding box around each face
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+        # Check if the face is approximately 100x100 pixels
+        if 95 <= w <= 105 and 95 <= h <= 105:
+            print("I see a face")
+            FOUND_FACE = True
+            
+
+    return frame  # Return the frame with any drawings applied
+
+
 #Takes in the current frame, and the ID of the marker you are trying to find. Spins until it can find
 #the marker and then centers the marker within the frame.
 def find_markers(frame, target_id):
@@ -303,22 +332,27 @@ def main():
             frame = np.asanyarray(color_frame.get_data())
 
             # Show the frame (optional)
-            cv2.imshow("RealSense Camera Feed", frame)
+            if(FOUND_FACE):
+                if (IDENTIFIED_OBJECT):
+                    if (FOUND_MARKER):
+                        if (ARRIVED_AT_MARKER):
+                            if (DROPPED_RING):
+                                if (FOUND_START):
+                                    if (AT_START):
+                                        print("All Done!")
+                                        break
+                                    else: move_toward_marker(frame, 0)
+                                else: find_markers(frame, 0)
+                            else: drop_ring()
+                        else: move_toward_marker(frame, TARGET_ID)
+                    else: find_markers(frame, TARGET_ID)
+                else: identify_object(frame)
+            else: 
+                frame = detect_face(frame)
+    
             
-            if (IDENTIFIED_OBJECT):
-                if (FOUND_MARKER):
-                    if (ARRIVED_AT_MARKER):
-                        if (DROPPED_RING):
-                            if (FOUND_START):
-                                if (AT_START):
-                                    print("All Done!")
-                                    break
-                                else: move_toward_marker(frame, 0)
-                            else: find_markers(frame, 0)
-                        else: drop_ring()
-                    else: move_toward_marker(frame, TARGET_ID)
-                else: find_markers(frame, TARGET_ID)
-            else: identify_object(frame)
+            cv2.imshow("RealSense Camera Feed", frame)
+
 
             # Exit loop if 'q' is pressed
             if cv2.waitKey(1) & 0xFF == ord('q'):

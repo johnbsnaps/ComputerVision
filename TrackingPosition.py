@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 import pyrealsense2 as rs
-from maestro import Controller
+from FinalProject.maestro import Controller
 import threading
 
 # Maestro channel assignments
@@ -30,6 +30,8 @@ FORWARD = 5200
 BACKWARD = 7000
 SPIN_SPEED_RIGHT = 5200
 SPIN_SPEED_LEFT = 6850
+
+
 
 # Tracker for markers
 passed_marker_ids = []
