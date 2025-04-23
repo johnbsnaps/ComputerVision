@@ -163,7 +163,7 @@ def detect_face(frame):
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
         # Check if the face is approximately 100x100 pixels
-        if 95 <= w <= 105 and 95 <= h <= 105:
+        if 100 <= w and 100 <= h:
             print("Saw a face")
             threading.Thread(target=speak, args=("Ugh, What now?",), daemon=True).start()
             time.sleep(5)
