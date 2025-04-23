@@ -2,8 +2,7 @@ import edge_tts
 import asyncio
 import os
 import threading
-import wave
-import pyaudio
+import subprocess
 
 class Talker:
     def __init__(self, voice="en-US-ChristopherNeural"):
@@ -16,23 +15,8 @@ class Talker:
         self._play_audio(self.temp_file)
 
     def _play_audio(self, file_path):
-        wf = wave.open(file_path, 'rb')
-
-        p = pyaudio.PyAudio()
-        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                        channels=wf.getnchannels(),
-                        rate=wf.getframerate(),
-                        output=True)
-
-        data = wf.readframes(1024)
-        while data:
-            stream.write(data)
-            data = wf.readframes(1024)
-
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
-        wf.close()
+        # Use aplay to play the audio file on Raspberry Pi
+        subprocess.run(["aplay", file_path])
 
     def say(self, text):
         threading.Thread(target=self._run_async, args=(text,), daemon=True).start()
