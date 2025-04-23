@@ -5,6 +5,7 @@ import pickle
 import pyrealsense2 as rs
 from maestro import Controller
 import threading
+import ttsCode
 
 
 
@@ -140,6 +141,39 @@ def move_arm():
         RIGHT_ARM_UP = True
         time.sleep(4)
 
+# Function for tts code
+# example usage threading.Thread(target=speak, args=("First message",), daemon=True).start()
+def speak(text):
+    ttsCode.say(text)
+
+
+
+## Scans for a human face first, starts the cleanup process
+def detect_face(frame):
+    global FOUND_FACE
+    # Convert the frame to grayscale (Haar cascades work on gray images)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Detect faces in the image
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+
+    # Iterate through all detected faces
+    for (x, y, w, h) in faces:
+        # Draw a bounding box around each face
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+        # Check if the face is approximately 100x100 pixels
+        if 95 <= w <= 105 and 95 <= h <= 105:
+            print("Saw a face")
+            threading.Thread(target=speak, args=("Ugh, What now?",), daemon=True).start()
+            time.sleep(5)
+            print("Looking for an object")
+            threading.Thread(target=speak, args=("What am I supposed to clean up this time?",), daemon=True).start()
+            FOUND_FACE = True
+            
+
+    return frame  # Return the frame with any drawings applied
+
 # Uses the setup Identifier function, and then looks for the object
 def identify_object(frame):
     global TARGET_ID, IDENTIFIED_OBJECT
@@ -172,36 +206,14 @@ def identify_object(frame):
     if best_match_count > 15:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
+        object_name = trained_objects[TARGET_ID]["name"]
         move_arm()
-        print(f"Identified object ID: {TARGET_ID}")
+        print(f"Identified Object: {object_name}, looking for box ID: {TARGET_ID}")
+        threading.Thread(target=speak, args=(f"Identified Object: {object_name}, looking for box ID: {TARGET_ID}",), daemon=True).start()
     else:
         TARGET_ID = None
         IDENTIFIED_OBJECT = False
         
-
-## Scans for a human face first, starts the cleanup process
-def detect_face(frame):
-    global FOUND_FACE
-    # Convert the frame to grayscale (Haar cascades work on gray images)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Detect faces in the image
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
-
-    # Iterate through all detected faces
-    for (x, y, w, h) in faces:
-        # Draw a bounding box around each face
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-        # Check if the face is approximately 100x100 pixels
-        if 95 <= w <= 105 and 95 <= h <= 105:
-            print("I see a face")
-            FOUND_FACE = True
-            
-
-    return frame  # Return the frame with any drawings applied
-
-
 #Takes in the current frame, and the ID of the marker you are trying to find. Spins until it can find
 #the marker and then centers the marker within the frame.
 def find_markers(frame, target_id):
@@ -279,7 +291,8 @@ def move_toward_marker(frame, marker_id):
         # Check if the marker is big enough (i.e., we're close enough)
         if marker_percentage >= 12:
             if (marker_id == 0):
-                print("Back at the Start!")
+                threading.Thread(target=speak, args=("I'm tired boss",), daemon=True).start()
+                print("At the Start")
                 AT_START = True
                 return True
             else:
@@ -312,7 +325,7 @@ def drop_ring():
     global DROPPED_RING
     DROPPED_RING = True
     move_arm()
-    print("Dropping Ring")
+    threading.Thread(target=speak, args=("I'm always cleaning up after you kids",), daemon=True).start()
     time.sleep(2)
 
 
