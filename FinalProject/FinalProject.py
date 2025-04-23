@@ -268,6 +268,7 @@ def find_markers(frame, target_id):
 def move_toward_marker(frame, marker_id):
     global ARRIVED_AT_MARKER
     global AT_START
+    global FOUND_MARKER
 
     # Detect markers again
     corners, ids, _ = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)
@@ -316,6 +317,7 @@ def move_toward_marker(frame, marker_id):
 
     else:
         print("Lost sight of marker while moving forward!")
+        FOUND_MARKER = False
         stop()
         return False
 
@@ -361,10 +363,8 @@ def main():
                         else: move_toward_marker(frame, TARGET_ID)
                     else: find_markers(frame, TARGET_ID)
                 else: identify_object(frame)
-            else: 
-                frame = detect_face(frame)
+            else: frame = detect_face(frame)
     
-            
             cv2.imshow("RealSense Camera Feed", frame)
 
 
