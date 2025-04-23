@@ -109,7 +109,8 @@ def identifier_setup():
 def stop():
     maestro.setTarget(STRAIGHT, NEUTRAL)
     maestro.setTarget(ROTATE, NEUTRAL)
-    time.sleep(2)
+    maestro.setTarget(RIGHT_ARM, ARM_DOWN)
+    time.sleep(.5)
 
 def turn_left(duration=0.5):
     print("Turning left...")
@@ -241,12 +242,12 @@ def find_markers(frame, target_id):
         else:
             # Marker not in visible IDs, keep rotating
             print(f"Marker {target_id} not yet found, rotating...")
-            turn_left(duration=1)
+            turn_left(duration=1.2)
             return False
     else:
         # No markers detected at all
         print(f"Marker {target_id} not yet found, rotating...")
-        turn_left(duration=.5)
+        turn_left(duration=1.2)
         return False
 
 ## Detects the markers we are supposed to be moving towards, then if we are too far away, checks to make sure
