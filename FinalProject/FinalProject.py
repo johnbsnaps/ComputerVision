@@ -32,6 +32,7 @@ SPIN_SPEED_RIGHT = 5200
 SPIN_SPEED_LEFT = 6850
 PAN_CENTER = 6000
 TILT_CENTER = 4500
+TILT_UP = 7000
 ARM_DOWN = 4500
 ARM_UP = 8000
 
@@ -151,8 +152,12 @@ def speak(text):
 ## Scans for a human face first, starts the cleanup process
 def detect_face(frame):
     global FOUND_FACE
+    # Move head up to better see face    
+    maestro.setTarget(TILT, TILT_UP)
+
     # Convert the frame to grayscale (Haar cascades work on gray images)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
 
     # Detect faces in the image
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
@@ -209,6 +214,7 @@ def identify_object(frame):
         object_name = trained_objects[TARGET_ID]["name"]
         move_arm()
         print(f"Identified Object: {object_name}, looking for box ID: {TARGET_ID}")
+        maestro.setTarget(TILT, TILT_CENTER)
         threading.Thread(target=speak, args=(f"Identified Object: {object_name}, looking for box ID: {TARGET_ID}",), daemon=True).start()
     else:
         TARGET_ID = None
