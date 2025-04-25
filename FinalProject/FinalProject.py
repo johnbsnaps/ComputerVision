@@ -111,7 +111,6 @@ def identifier_setup():
 def stop():
     maestro.setTarget(STRAIGHT, NEUTRAL)
     maestro.setTarget(ROTATE, NEUTRAL)
-    maestro.setTarget(RIGHT_ARM, ARM_DOWN)
     time.sleep(.5)
 
 def turn_left(duration=0.5):
@@ -138,8 +137,8 @@ def move_arm():
         maestro.setTarget(RIGHT_ARM, ARM_DOWN)
         RIGHT_ARM_UP = False
     else: 
-        maestro.setTarget(RIGHT_ARM, ARM_UP)
         RIGHT_ARM_UP = True
+        maestro.setTarget(RIGHT_ARM, ARM_UP)
         time.sleep(4)
 
 # Function for tts code
