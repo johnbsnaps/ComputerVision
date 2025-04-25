@@ -208,7 +208,7 @@ def identify_object(frame):
             best_match_count = len(good_matches)
             best_match_id = obj_id
 
-    if best_match_count > 200:
+    if best_match_count > 100:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
         object_name = trained_objects[TARGET_ID]["name"]
