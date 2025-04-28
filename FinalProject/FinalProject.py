@@ -141,6 +141,12 @@ def move_arm():
         maestro.setTarget(RIGHT_ARM, ARM_UP)
         time.sleep(4)
 
+def toss_ring():
+    global RIGHT_ARM_UP
+    maestro.setTarget(RIGHT_ARM, ARM_DOWN)
+    time.sleep(.5)
+    maestro.setTarget(RIGHT_ARM, ARM_UP)
+
 # Function for tts code
 # example usage threading.Thread(target=speak, args=("First message",), daemon=True).start()
 def speak(text):
@@ -331,7 +337,9 @@ def move_toward_marker(frame, marker_id):
 def drop_ring():
     global DROPPED_RING
     DROPPED_RING = True
+    toss_ring()  #comment this out if it doesn't work
     move_arm()
+    time.sleep(5)
     threading.Thread(target=speak, args=("I'm always cleaning up after you kids",), daemon=True).start()
     time.sleep(2)
 
