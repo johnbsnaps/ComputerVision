@@ -146,6 +146,7 @@ def toss_ring():
     maestro.setTarget(RIGHT_ARM, ARM_DOWN)
     time.sleep(.5)
     maestro.setTarget(RIGHT_ARM, ARM_UP)
+    time.sleep(1)
 
 # Function for tts code
 # example usage threading.Thread(target=speak, args=("First message",), daemon=True).start()
