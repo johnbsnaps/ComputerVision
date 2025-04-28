@@ -216,7 +216,7 @@ def identify_object(frame):
     object_name = trained_objects[best_match_id]["name"]
     
     print(f"Matched with {object_name} at {best_match_count} confidence")
-    if best_match_count > 85:
+    if best_match_count > 50:
         TARGET_ID = best_match_id
         IDENTIFIED_OBJECT = True
         object_name = trained_objects[TARGET_ID]["name"]
